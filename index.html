@@ -1,266 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Breakthrough Engine — Your AI Personal Coach</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
-<style>
-  :root {
-    --bg: #0c0b09; --bg2: #141210; --bg3: #1c1a17; --bg4: #242018;
-    --border: #2e2b24; --border2: #3d3930; --text: #f0ece4; --text2: #9a9188;
-    --text3: #5c5750; --accent: #c4841a; --accent2: #e8a830; --accent-bg: #1f1a0f;
-    --accent-text: #e8c878; --green: #4a9c3f; --green-bg: #0f1f0d; --green-text: #7acc6e;
-    --red: #c0392b; --red-bg: #1f0d0d; --red-text: #f08070; --purple: #7c5cbf;
-    --purple-bg: #130f1f; --purple-text: #b098e8; --radius: 10px; --radius-sm: 6px;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 40px 20px 80px; }
-  .app { width: 100%; max-width: 680px; }
-  h1, h2, h3 { font-family: 'Playfair Display', serif; font-weight: 500; }
-  .screen { display: none; } .screen.active { display: block; animation: fadein 0.5s ease; }
-  .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; background: var(--accent-bg); color: var(--accent-text); border: 1px solid #3a2d10; }
-  .card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 22px; margin-bottom: 12px; }
-  input[type=text], input[type=password], textarea { width: 100%; background: var(--bg3); border: 1px solid var(--border2); border-radius: var(--radius-sm); color: var(--text); padding: 11px 14px; margin-bottom: 12px; display: block; outline: none; }
-  .btn { padding: 10px 22px; font-size: 14px; font-weight: 500; border: 1px solid var(--border2); border-radius: var(--radius-sm); background: transparent; color: var(--text2); cursor: pointer; transition: all .15s; }
-  .btn-primary { background: var(--accent); color: #0c0b09; border-color: var(--accent); }
-  .btn-full { width: 100%; padding: 14px; font-size: 15px; }
-  .progress-track { height: 2px; background: var(--bg3); border-radius: 2px; margin-bottom: 28px; }
-  .progress-fill { height: 2px; background: var(--accent); width: 0%; transition: width .4s; }
-  .q-option { display: flex; align-items: center; gap: 12px; padding: 13px 16px; border: 1px solid var(--border2); border-radius: var(--radius-sm); cursor: pointer; margin-bottom: 8px; font-size: 14px; transition: all .15s; background: var(--bg2); }
-  .q-option.selected { border-color: var(--accent); background: var(--accent-bg); color: var(--accent-text); }
-  .opt-dot { width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--border2); display: flex; align-items: center; justify-content: center; }
-  .q-option.selected .opt-dot { background: var(--accent); border-color: var(--accent); color: var(--bg); }
-  .archetype-box { border: 1px solid var(--accent); border-radius: var(--radius); padding: 28px 24px; text-align: center; margin-bottom: 16px; background: var(--accent-bg); }
-  .archetype-name { font-family: 'Playfair Display', serif; font-size: 28px; color: var(--accent2); margin-bottom: 10px; }
-  .block-card { border-left: 2px solid var(--accent); padding: 14px 16px; background: var(--bg3); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin-bottom: 10px; }
-  .block-label { font-size: 10px; font-weight: 500; color: var(--accent); text-transform: uppercase; margin-bottom: 6px; }
-  .tab-row { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
-  .tab { padding: 10px 18px; font-size: 13px; border: none; background: transparent; color: var(--text3); cursor: pointer; border-bottom: 2px solid transparent; }
-  .tab.active { color: var(--accent2); border-bottom-color: var(--accent); }
-  .tab-panel { display: none; } .tab-panel.active { display: block; }
-  .protocol-item { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); }
-  .protocol-num { width: 28px; height: 28px; border-radius: 50%; background: var(--accent-bg); border: 1px solid #3a2d10; color: var(--accent-text); font-size: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .chat-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; min-height: 200px; max-height: 400px; overflow-y: auto; }
-  .chat-bubble { padding: 12px 16px; border-radius: var(--radius); font-size: 14px; line-height: 1.6; max-width: 85%; }
-  .chat-ai { background: var(--bg3); align-self: flex-start; border-radius: 4px var(--radius) var(--radius) var(--radius); }
-  .chat-user { background: var(--accent-bg); align-self: flex-end; border-radius: var(--radius) 4px var(--radius) var(--radius); border: 1px solid #3a2d10; }
-  .spin { animation: spin 1s linear infinite; display: inline-block; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  @keyframes fadein { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-  .score-bar-row { margin-bottom: 14px; }
-  .score-bar-track { height: 6px; background: var(--bg3); border-radius: 3px; }
-  .score-bar-fill { height: 6px; border-radius: 3px; background: var(--accent); transition: width .8s; }
-  .analysis-step { display: flex; align-items: center; gap: 10px; padding: 6px 0; font-size: 13px; color: var(--text3); }
-  .analysis-step.done { color: var(--text2); }
-  .analysis-step .step-icon { color: var(--accent); }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Breakthrough Engine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&display=swap');
+        
+        :root {
+            --gold: #C5A059;
+            --dark: #0A0A0A;
+        }
+        
+        body {
+            background-color: var(--dark);
+            color: white;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .serif { font-family: 'Bodoni Moda', serif; }
+        
+        .gold-gradient {
+            background: linear-gradient(135deg, #C5A059 0%, #F1D39B 50%, #C5A059 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .btn-gold {
+            background: var(--gold);
+            transition: all 0.3s ease;
+        }
+
+        .btn-gold:hover {
+            background: #D4B475;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(197, 160, 89, 0.2);
+        }
+
+        #loading-spinner {
+            border: 3px solid rgba(197, 160, 89, 0.1);
+            border-left-color: var(--gold);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col items-center justify-center p-6">
 
-<div class="app">
-  <div class="screen active" id="s0">
-    <div style="text-align:center; padding: 48px 0;">
-      <div class="badge" style="margin-bottom:20px">The world's first AI personal coach</div>
-      <h1 style="font-size:36px; margin-bottom:14px;">The Breakthrough Engine</h1>
-      <p style="color:var(--text2); margin-bottom:32px;">Identify your blocks. Name your patterns. Build your protocol.</p>
-      <div style="max-width:380px; margin:0 auto;">
-        <input type="text" id="user-name" placeholder="Your Name">
-        <input type="password" id="api-key" placeholder="Anthropic API Key (Optional for Demo)">
-        <button class="btn btn-primary btn-full" onclick="startAssessment()">Begin Breakthrough Analysis</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="screen" id="s1">
-    <div style="margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
-      <span id="q-step-label" style="font-size:12px; color:var(--text3);">Question 1 of 8</span>
-      <span class="badge" id="q-theme-badge">Theme</span>
-    </div>
-    <div class="progress-track"><div class="progress-fill" id="progress-bar"></div></div>
-    <h2 id="q-title" style="margin-bottom:8px;"></h2>
-    <p id="q-sub" style="font-size:14px; color:var(--text2); margin-bottom:20px;"></p>
-    <div id="q-body"></div>
-    <div style="display:flex; justify-content:space-between; margin-top:24px;">
-      <button class="btn" onclick="prevQ()" id="back-btn">Back</button>
-      <button class="btn btn-primary" onclick="nextQ()">Continue</button>
-    </div>
-  </div>
-
-  <div class="screen" id="s2">
-    <div style="text-align:center; padding:60px 0;">
-      <i class="ti ti-brain spin" style="font-size:48px; color:var(--accent); margin-bottom:20px;"></i>
-      <h2>Analyzing Patterns...</h2>
-      <div id="analysis-steps" style="max-width:360px; margin:20px auto; text-align:left;"></div>
-    </div>
-  </div>
-
-  <div class="screen" id="s3">
-    <div class="tab-row">
-      <button class="tab active" onclick="showTab(0)">Report</button>
-      <button class="tab" onclick="showTab(1)">Protocol</button>
-      <button class="tab" onclick="showTab(2)">Coach</button>
-      <button class="tab" onclick="showTab(3)">Scores</button>
+    <div class="text-center mb-12">
+        <span class="text-[10px] uppercase tracking-[0.3em] text-gray-500 mb-4 block">The World's First AI Personal Coach</span>
+        <h1 class="serif text-4xl md:text-6xl mb-4">The Breakthrough Engine</h1>
+        <p class="text-gray-400 font-light tracking-wide italic">Identify your blocks. Name your patterns. Build your protocol.</p>
     </div>
 
-    <div class="tab-panel active" id="t0">
-      <div class="archetype-box">
-        <div class="archetype-name" id="r-archetype-name"></div>
-        <div id="r-archetype-desc" style="font-size:14px; color:var(--text2);"></div>
-      </div>
-      <div class="block-card"><div class="block-label">Core Block</div><div id="r-core-block" class="block-text"></div></div>
-      <div class="block-card" style="border-color:var(--purple)"><div class="block-label" style="color:var(--purple-text)">Hidden Pattern</div><div id="r-hidden-pattern" class="block-text"></div></div>
-      <div class="block-card" style="border-color:var(--green)"><div class="block-label" style="color:var(--green-text)">Breakthrough Insight</div><div id="r-insight" class="block-text"></div></div>
+    <div id="app-container" class="w-full max-w-md space-y-6">
+        <div class="space-y-4">
+            <input type="text" id="userName" placeholder="Your Name" 
+                   class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-4 focus:outline-none focus:border-[#C5A059]/50 transition-colors">
+            
+            <button onclick="startAnalysis()" id="submitBtn"
+                    class="w-full btn-gold text-black font-semibold py-4 rounded-lg uppercase tracking-widest text-sm">
+                Begin Breakthrough Analysis
+            </button>
+        </div>
     </div>
 
-    <div class="tab-panel" id="t1">
-      <div id="r-protocol-list"></div>
+    <div id="loading" class="hidden flex flex-col items-center space-y-4 mt-8">
+        <div id="loading-spinner"></div>
+        <p class="text-xs uppercase tracking-widest text-[#C5A059] animate-pulse">Analyzing Patterns...</p>
     </div>
 
-    <div class="tab-panel" id="t2">
-      <div class="chat-list" id="chat-list"></div>
-      <div style="display:flex; gap:8px;">
-        <input type="text" id="chat-input" placeholder="Ask your coach..." style="margin-bottom:0;">
-        <button class="btn btn-primary" onclick="sendChat()">Send</button>
-      </div>
+    <div id="result" class="hidden w-full max-w-2xl mt-12 p-8 border border-white/10 rounded-2xl bg-white/5 backdrop-blur-xl">
+        <div id="resultContent" class="serif text-lg leading-relaxed text-gray-200"></div>
     </div>
 
-    <div class="tab-panel" id="t3">
-      <div id="score-bars"></div>
-      <div id="score-note" style="margin-top:20px; font-size:13px; color:var(--text2); background:var(--bg3); padding:15px; border-radius:8px;"></div>
-    </div>
-  </div>
-</div>
+    <script>
+        async function startAnalysis() {
+            const name = document.getElementById('userName').value;
+            if (!name) return alert('Please enter your name');
 
-<script>
-// --- DATA & CONFIG ---
-const Qs = [
-  { id:'pain', theme:'Situation', title:'Biggest pain right now?', type:'single', opts:[{v:'money', l:'Money stress'},{v:'stuck', l:'Feeling stuck'},{v:'overwhelm', l:'Mental chaos'},{v:'energy', l:'No motivation'}] },
-  { id:'duration', theme:'Depth', title:'How long?', type:'single', opts:[{v:'new', l:'< 6 months'},{v:'year', l:'6-12 months'},{v:'long', l:'1+ years'}] },
-  { id:'satisfaction', theme:'Baseline', title:'Life satisfaction (1-10)', type:'slider' },
-  { id:'inner_voice', theme:'Dialogue', title:'Inner voice when you fail?', type:'text', placeholder:'"I always mess up..."'},
-  { id:'change_first', theme:'Vision', title:'What changes first if solved?', type:'text', placeholder:'"I would wake up excited..."'},
-  { id:'secret_action', theme:'Truth', title:'What do you know you need to do?', type:'text', placeholder:'"I need to quit my job..."'},
-  { id:'one_word', theme:'State', title:'One word to describe most days', type:'text', placeholder:'"Exhausted", "Restless"...'}
-];
+            // UI Switch
+            document.getElementById('app-container').classList.add('opacity-50', 'pointer-events-none');
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('result').classList.add('hidden');
+            document.getElementById('submitBtn').innerText = 'Processing...';
 
-let currentQ = 0, answers = {}, userName = '', apiKey = '', analysisResult = null, chatHistory = [];
-const steps = ['Decoding pain patterns...', 'Mapping behavioral loops...', 'Identifying core block...', 'Finalizing breakthrough protocol...'];
+            try {
+                // Vercel-ийн Environment Variable-аас түлхүүрийг автоматаар уншина
+                const response = await fetch('https://api.anthropic.com/v1/messages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-api-key': 'ANTHROPIC_API_KEY', // Энд Vercel дээрх түлхүүр ажиллана
+                        'anthropic-version': '2023-06-01',
+                        'dangerously-allow-the-developer-to-if-they-must-bypass-cors-just-for-this-demo': 'true'
+                    },
+                    body: JSON.stringify({
+                        model: "claude-3-5-sonnet-20240620",
+                        max_tokens: 1024,
+                        messages: [{
+                            role: "user", 
+                            content: `User name is ${name}. Please provide a psychological breakthrough coaching analysis for their current patterns.`
+                        }]
+                    })
+                });
 
-// --- APP LOGIC ---
-function startAssessment() {
-  userName = document.getElementById('user-name').value || 'Friend';
-  apiKey = document.getElementById('api-key').value;
-  showScreen('s1'); renderQ();
-}
+                const data = await response.json();
+                
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('result').classList.remove('hidden');
+                document.getElementById('resultContent').innerHTML = data.content[0].text.replace(/\n/g, '<br>');
+                document.getElementById('submitBtn').innerText = 'Analysis Complete';
 
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
-
-function renderQ() {
-  const q = Qs[currentQ];
-  document.getElementById('q-step-label').textContent = `Question ${currentQ + 1} of ${Qs.length}`;
-  document.getElementById('q-theme-badge').textContent = q.theme;
-  document.getElementById('q-title').textContent = q.title;
-  document.getElementById('progress-bar').style.width = `${((currentQ)/Qs.length)*100}%`;
-  
-  const body = document.getElementById('q-body');
-  if(q.type === 'single') {
-    body.innerHTML = q.opts.map(o => `<div class="q-option ${answers[q.id]===o.v?'selected':''}" onclick="selectOpt('${o.v}')"><div class="opt-dot"></div>${o.l}</div>`).join('');
-  } else if(q.type === 'slider') {
-    body.innerHTML = `<input type="range" min="1" max="10" value="${answers[q.id]||5}" oninput="answers['${q.id}']=this.value; document.getElementById('sl-v').innerText=this.value"><div id="sl-v" style="text-align:center; font-size:24px; color:var(--accent)">${answers[q.id]||5}</div>`;
-  } else {
-    body.innerHTML = `<textarea oninput="answers['${q.id}']=this.value" placeholder="${q.placeholder}">${answers[q.id]||''}</textarea>`;
-  }
-}
-
-function selectOpt(v) { answers[Qs[currentQ].id] = v; renderQ(); }
-function nextQ() { if(currentQ < Qs.length-1) { currentQ++; renderQ(); } else { runAnalysis(); } }
-function prevQ() { if(currentQ > 0) { currentQ--; renderQ(); } }
-
-async function runAnalysis() {
-  showScreen('s2');
-  const stepsEl = document.getElementById('analysis-steps');
-  steps.forEach((s, i) => setTimeout(() => {
-    stepsEl.innerHTML += `<div class="analysis-step done"><i class="ti ti-check step-icon"></i>${s}</div>`;
-  }, i * 800));
-
-  const prompt = `Analyze this and return ONLY valid JSON:
-  Name: ${userName}, Pain: ${answers.pain}, Voice: ${answers.inner_voice}, Secret: ${answers.secret_action}
-  JSON keys: archetype_name, archetype_desc, core_block, hidden_pattern, breakthrough_insight, warning, first_step, protocol_intro, protocol (array of {title, desc}), scores (obj of 5 areas), score_note.`;
-
-  try {
-    if(!apiKey) throw "demo";
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01', 'dangerously-allow-the-browser': 'true'},
-      body: JSON.stringify({ model: 'claude-3-5-sonnet-20240620', max_tokens: 1500, messages: [{role: 'user', content: prompt}] })
-    });
-    const data = await res.json();
-    analysisResult = JSON.parse(data.content[0].text);
-  } catch(e) {
-    analysisResult = buildDemoResult(); // Fallback to demo if no API key
-  }
-  setTimeout(showReport, 3500);
-}
-
-function buildDemoResult() {
-  return {
-    archetype_name: "The Frozen Achiever",
-    archetype_desc: `${userName}, you have high standards but an even higher fear of being "average", which ironically keeps you stuck.`,
-    core_block: "Procrastination as a protection mechanism.",
-    hidden_pattern: "You plan to avoid doing. The planning feels like work, but it's actually an escape.",
-    breakthrough_insight: `Your inner voice "${answers.inner_voice}" is a lie designed to keep you safe from the risk of trying.`,
-    warning: "If you don't act, next year will be a more tired version of today.",
-    first_step: "Do 5 minutes of your secret action TODAY.",
-    protocol_intro: "Designed to break your specific loop.",
-    protocol: [{title: "Identity Shift", desc: "Spend 2 mins affirming your new self."}, {title: "Micro-Action", desc: "Do the hardest thing first for 10 mins."}],
-    scores: { clarity: 4, energy: 3, purpose: 5, money: 4, relations: 6 },
-    score_note: "Your energy is low because your purpose is unaligned."
-  };
-}
-
-function showReport() {
-  const r = analysisResult;
-  document.getElementById('r-archetype-name').innerText = r.archetype_name;
-  document.getElementById('r-archetype-desc').innerText = r.archetype_desc;
-  document.getElementById('r-core-block').innerText = r.core_block;
-  document.getElementById('r-hidden-pattern').innerText = r.hidden_pattern;
-  document.getElementById('r-insight').innerText = r.breakthrough_insight;
-  document.getElementById('r-protocol-list').innerHTML = r.protocol.map((p,i)=>`<div class="protocol-item"><div class="protocol-num">${i+1}</div><div><b>${p.title}</b><p>${p.desc}</p></div></div>`).join('');
-  
-  const sb = document.getElementById('score-bars');
-  sb.innerHTML = Object.entries(r.scores).map(([k,v])=>`<div class="score-bar-row"><span>${k}</span><div class="score-bar-track"><div class="score-bar-fill" style="width:${v*10}%"></div></div></div>`).join('');
-  document.getElementById('score-note').innerText = r.score_note;
-  
-  chatHistory = [{role:'assistant', content: `Hello ${userName}. I see you are ${r.archetype_name}. Let's get to work.`}];
-  renderChat();
-  showScreen('s3');
-}
-
-function showTab(i) {
-  document.querySelectorAll('.tab').forEach((t,j)=>t.classList.toggle('active', i===j));
-  document.querySelectorAll('.tab-panel').forEach((p,j)=>p.classList.toggle('active', i===j));
-}
-
-function renderChat() {
-  document.getElementById('chat-list').innerHTML = chatHistory.map(m=>`<div class="chat-bubble chat-${m.role==='assistant'?'ai':'user'}">${m.content}</div>`).join('');
-}
-
-async function sendChat() {
-  const inp = document.getElementById('chat-input');
-  const msg = inp.value; if(!msg) return;
-  chatHistory.push({role:'user', content: msg}); renderChat(); inp.value = '';
-  // Simple Mock Coach Response (Replace with API call if needed)
-  setTimeout(()=> {
-    chatHistory.push({role:'assistant', content: "That is a classic part of your pattern. How can you take one small step right now?"});
-    renderChat();
-  }, 1000);
-}
-</script>
+            } catch (error) {
+                console.error(error);
+                alert('Connection error. Please ensure your Anthropic billing is active.');
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('app-container').classList.remove('opacity-50', 'pointer-events-none');
+                document.getElementById('submitBtn').innerText = 'Begin Breakthrough Analysis';
+            }
+        }
+    </script>
 </body>
 </html>
