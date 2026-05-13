@@ -1,37 +1,32 @@
-export default async function handler(req, res) {
-    if (req.method !== 'POST') return res.status(405).send('Method Not Allowed');
-
-    const { name } = req.body;
-    const apiKey = process.env.ANTHROPIC_API_KEY;
-
-    // DEMO MODE: If no API key is set in Vercel, this high-end placeholder will show.
-    if (!apiKey) {
-        return res.status(200).json({
-            text: `Analyzing neural pathways for ${name}... [ENCRYPTED DATA DETECTED]. Your psychological profile suggests a major breakthrough is pending. Please configure the secure neural bridge (API Key) to reveal the full 24-hour protocol.`
-        });
+{
+  "project_name": "THE_UNSEEN_V01",
+  "framework": "Next.js 14 (App Router)",
+  "styling": "Tailwind CSS + Framer Motion",
+  "deployment_target": "Vercel",
+  "design_specs": {
+    "hero": {
+      "inspiration": "Apple / Nike",
+      "elements": ["Sticky Video Background", "Large Sans-Serif Typography", "Parallax Product Reveal"],
+      "logic": "As seen in Screenshot 2026-05-13 at 14.26.23.jpg, use a centered mobile-first hero."
+    },
+    "buy_logic": {
+      "inspiration": "Gumroad / Aesop",
+      "components": ["Single-click Checkout", "Dynamic Cart Preview", "Trust Badges"],
+      "layout": "Referencing Screenshot 2026-05-13 at 14.31.07.jpg, keep the order summary on a 1/3 right-hand sidebar."
     }
-
-    try {
-        const response = await fetch('https://api.anthropic.com/v1/messages', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'x-api-key': apiKey,
-                'anthropic-version': '2023-06-01'
-            },
-            body: JSON.stringify({
-                model: "claude-3-5-sonnet-20240620",
-                max_tokens: 1024,
-                messages: [{
-                    role: "user",
-                    content: `Analyze user ${name} using the 'Invisible Employee' framework. Provide a 3-paragraph, elite psychological diagnostic for a 5,000 MNT investment. Paragraph 1: The current block. Paragraph 2: The Protocol change. Paragraph 3: The 24-hour result.`
-                }]
-            })
-        });
-
-        const data = await response.json();
-        res.status(200).json({ text: data.content[0].text });
-    } catch (error) {
-        res.status(500).json({ error: 'System Error' });
-    }
+  },
+  "backend_configuration": {
+    "database": "Supabase (PostgreSQL)",
+    "payments": "Stripe Checkout (Embedded)",
+    "functions": [
+      "api/create-intent: Initialize payment session",
+      "api/webhook: Verify purchase and trigger 'Unseen' digital delivery",
+      "api/inventory: Real-time stock status as seen in Apple's 'Pick your favorite' logic (Screenshot 2026-05-13 at 14.27.27.jpg)"
+    ]
+  },
+  "deployment_steps": [
+    "Clone 'The Unseen' starter template",
+    "Set VERCEL_ENV variables for Stripe_Secret and Supabase_Key",
+    "Push to Main: Vercel will auto-assign Edge Functions for global low-latency"
+  ]
 }
