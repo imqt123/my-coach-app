@@ -1,113 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Breakthrough Engine | Neural Analysis</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&display=swap');
-        :root { --gold: #C5A059; --dark: #050505; }
-        body { background-color: var(--dark); color: white; font-family: 'Inter', sans-serif; scroll-behavior: smooth; overflow-x: hidden; }
-        .serif { font-family: 'Bodoni Moda', serif; }
-        .gold-border { border: 1px solid rgba(197, 160, 89, 0.3); }
-        .btn-gold { background: var(--gold); transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); color: black; }
-        .btn-gold:hover { background: #D4B475; transform: scale(1.02); box-shadow: 0 0 20px rgba(197, 160, 89, 0.2); }
-        .modal-blur { backdrop-filter: blur(12px); background: rgba(0,0,0,0.85); }
-        @keyframes scan { 0% { top: 0%; } 100% { top: 100%; } }
-        .scanner-line { height: 2px; background: var(--gold); position: absolute; width: 100%; animation: scan 2s linear infinite; box-shadow: 0 0 15px var(--gold); z-index: 20; }
-    </style>
-</head>
-<body class="min-h-screen">
-
-    <nav class="p-6 flex justify-between items-center max-w-6xl mx-auto border-b border-white/5">
-        <div class="serif text-2xl tracking-tighter text-[#C5A059]">B.E.</div>
-        <button onclick="toggleLang()" id="langBtn" class="text-[10px] uppercase tracking-[0.2em] text-gray-400 border border-white/10 px-3 py-1 rounded-full hover:bg-white/5">EN / MN</button>
-    </nav>
-
-    <header class="max-w-4xl mx-auto text-center pt-24 pb-16 px-6">
-        <h1 class="serif text-5xl md:text-8xl mb-8 leading-tight tracking-tight" id="mainH1">Identify Your Blocks. <br><span class="italic text-gray-500">Rewrite Your Protocol.</span></h1>
-        
-        <div class="max-w-md mx-auto gold-border p-10 rounded-3xl bg-white/[0.02] backdrop-blur-xl relative">
-            <div class="relative z-10 space-y-6">
-                <input type="text" id="userName" placeholder="Full Name / Таны нэр" class="w-full bg-black/50 border border-white/10 rounded-xl px-5 py-5 focus:border-[#C5A059] outline-none text-center text-lg">
-                <button onclick="showPayment()" class="w-full btn-gold font-bold py-5 rounded-xl uppercase tracking-[0.2em] text-xs shadow-2xl">
-                    Begin Neural Analysis
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <!-- QR ONLY MODAL -->
-    <div id="paymentModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-6 modal-blur">
-        <div class="max-w-sm w-full bg-[#0A0A0A] gold-border p-8 rounded-[2.5rem] text-center relative shadow-3xl">
-            <h2 class="serif text-2xl mb-2" id="modalTitle">Secure Checkout</h2>
-            <p class="text-[9px] text-gray-500 uppercase tracking-widest mb-6 italic">Transaction ID: #BE-SCAN-2026</p>
-            
-            <div class="relative w-56 h-56 mx-auto mb-8 bg-white p-3 rounded-2xl overflow-hidden shadow-2xl">
-                <div class="scanner-line"></div>
-                <img src="download.jpeg" alt="QPay QR" class="w-full h-full object-contain">
-            </div>
-
-            <p class="text-[#C5A059] font-bold text-2xl mb-2">5,000₮</p>
-            <p class="text-[10px] text-gray-400 mb-8 uppercase tracking-widest" id="paymentInstructions">Scan to pay via QPay</p>
-
-            <button onclick="startAnalysis()" class="w-full bg-white text-black font-bold py-4 rounded-xl uppercase tracking-widest text-[10px] hover:bg-gray-200 transition-all">
-                Verify Payment & Unlock
-            </button>
-            <button onclick="closePayment()" class="mt-4 text-gray-600 text-[9px] uppercase tracking-widest hover:text-white transition-all">Cancel</button>
-        </div>
-    </div>
-
-    <div id="result" class="hidden max-w-3xl mx-auto my-20 p-12 gold-border rounded-[2rem] bg-white/[0.03]">
-        <div id="loading" class="text-center py-20">
-            <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#C5A059] mb-6"></div>
-            <p id="loadText" class="text-[10px] tracking-[0.3em] uppercase text-[#C5A059] animate-pulse">Running Neural Diagnostics...</p>
-        </div>
-        <div id="resultContent" class="serif text-xl md:text-2xl leading-[1.8] text-gray-200 italic"></div>
-    </div>
-
-    <script>
-        let currentLang = 'EN';
-        const content = {
-            EN: { h1: 'Identify Your Blocks. <br><span class="italic text-gray-500">Rewrite Your Protocol.</span>', modal: 'Secure Checkout', instruct: 'Scan to pay via QPay', loading: 'Running Neural Diagnostics...' },
-            MN: { h1: 'Далд саадаа оношил. <br><span class="italic text-gray-500">Протоколоо шинэчил.</span>', modal: 'Төлбөр баталгаажуулах', instruct: 'QPay-ээр уншуулж төлнө үү', loading: 'Оношлогоо явагдаж байна...' }
-        };
-
-        function toggleLang() {
-            currentLang = currentLang === 'EN' ? 'MN' : 'EN';
-            document.getElementById('mainH1').innerHTML = content[currentLang].h1;
-            document.getElementById('modalTitle').innerText = content[currentLang].modal;
-            document.getElementById('paymentInstructions').innerText = content[currentLang].instruct;
-            document.getElementById('loadText').innerText = content[currentLang].loading;
-        }
-
-        function showPayment() {
-            if (!document.getElementById('userName').value) return alert('Enter Name');
-            document.getElementById('paymentModal').classList.remove('hidden');
-        }
-
-        function closePayment() { document.getElementById('paymentModal').classList.add('hidden'); }
-
-        async function startAnalysis() {
-            closePayment();
-            const name = document.getElementById('userName').value;
-            document.getElementById('result').classList.remove('hidden');
-            window.scrollTo({ top: document.getElementById('result').offsetTop, behavior: 'smooth' });
-
-            try {
-                const response = await fetch('/api/analyze', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name })
-                });
-                const data = await response.json();
-                document.getElementById('loading').classList.add('hidden');
-                document.getElementById('resultContent').innerHTML = data.text.replace(/\n/g, '<br><br>');
-            } catch (error) {
-                alert('System error. Ensure payment is complete.');
-            }
-        }
-    </script>
-</body>
-</html>
+{
+  "project_name": "THE_UNSEEN_V01",
+  "framework": "Next.js 14 (App Router)",
+  "styling": "Tailwind CSS + Framer Motion",
+  "deployment_target": "Vercel",
+  "design_specs": {
+    "hero": {
+      "inspiration": "Apple / Nike",
+      "elements": ["Sticky Video Background", "Large Sans-Serif Typography", "Parallax Product Reveal"],
+      "logic": "As seen in Screenshot 2026-05-13 at 14.26.23.jpg, use a centered mobile-first hero."
+    },
+    "buy_logic": {
+      "inspiration": "Gumroad / Aesop",
+      "components": ["Single-click Checkout", "Dynamic Cart Preview", "Trust Badges"],
+      "layout": "Referencing Screenshot 2026-05-13 at 14.31.07.jpg, keep the order summary on a 1/3 right-hand sidebar."
+    }
+  },
+  "backend_configuration": {
+    "database": "Supabase (PostgreSQL)",
+    "payments": "Stripe Checkout (Embedded)",
+    "functions": [
+      "api/create-intent: Initialize payment session",
+      "api/webhook: Verify purchase and trigger 'Unseen' digital delivery",
+      "api/inventory: Real-time stock status as seen in Apple's 'Pick your favorite' logic (Screenshot 2026-05-13 at 14.27.27.jpg)"
+    ]
+  },
+  "deployment_steps": [
+    "Clone 'The Unseen' starter template",
+    "Set VERCEL_ENV variables for Stripe_Secret and Supabase_Key",
+    "Push to Main: Vercel will auto-assign Edge Functions for global low-latency"
+  ]
+}
