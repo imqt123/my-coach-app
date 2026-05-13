@@ -1,1 +1,17 @@
-
+async function runAnalysis() {
+  // ... (keep your existing loading animation code)
+  try {
+    const res = await fetch('/api/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt: prompt }) // Sends the assessment to your secure bridge
+    });
+    const data = await res.json();
+    const raw = data.content.map(c => c.text || '').join('');
+    analysisResult = JSON.parse(raw.replace(/```json|
+```/g, '').trim());
+  } catch (e) {
+    analysisResult = buildDemoResult();
+  }
+  setTimeout(() => showReport(), 600);
+}
